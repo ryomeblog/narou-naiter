@@ -1,0 +1,64 @@
+{
+  "questions": [
+    {
+      "id": "q1",
+      "text": "主人公は異世界に転生または転移しますか？",
+      "attribute": "isekai",
+      "weight": 10
+    },
+    {
+      "id": "q2",
+      "text": "主人公は特別な能力や圧倒的な力を持っていますか？",
+      "attribute": "cheat_ability",
+      "weight": 8
+    },
+    {
+      "id": "q3",
+      "text": "物語にハーレム要素はありますか？",
+      "attribute": "harem",
+      "weight": 6
+    },
+    {
+      "id": "q4",
+      "text": "RPGのようなレベルやスキルのシステムがありますか？",
+      "attribute": "rpg_like",
+      "weight": 7
+    },
+    {
+      "id": "q5",
+      "text": "主人公は弱い立場から強くなっていきますか？",
+      "attribute": "weak_to_strong",
+      "weight": 7
+    },
+    {
+      "id": "q6",
+      "text": "復讐や名誉回復がテーマになっていますか？",
+      "attribute": "revenge",
+      "weight": 6
+    },
+    {
+      "id": "q7",
+      "text": "ドラゴンは物語に登場しますか？",
+      "attribute": "dragon",
+      "weight": 5
+    },
+    {
+      "id": "q8",
+      "text": "舞台はゲームの世界や、ゲームのような世界ですか？",
+      "attribute": "game_world",
+      "weight": 7
+    },
+    {
+      "id": "q9",
+      "text": "主人公は異世界に召喚されましたか？",
+      "attribute": "summoned",
+      "weight": 8
+    },
+    {
+      "id": "q10",
+      "text": "魔法学校や魔法アカデミーは出てきますか？",
+      "attribute": "magic_school",
+      "weight": 6
+    }
+  ]
+}

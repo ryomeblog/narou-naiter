@@ -1,0 +1,40 @@
+{
+  "animes": [
+    {
+      "id": "001",
+      "title": "転生したらスライムだった件",
+      "imageUrl": "/images/slime.jpg",
+      "description": "通り魔に刺され死亡した三上悟は、スライムとして異世界に転生する。",
+      "attributes": {
+        "isekai": true,
+        "cheat_ability": true,
+        "harem": false,
+        "rpg_like": true,
+        "weak_to_strong": true,
+        "revenge": false,
+        "dragon": true,
+        "game_world": false,
+        "summoned": false,
+        "magic_school": false
+      }
+    },
+    {
+      "id": "002",
+      "title": "盾の勇者の成り上がり",
+      "imageUrl": "/images/shield.jpg",
+      "description": "盾の勇者として異世界に召喚された岩谷尚文の活躍を描く物語。",
+      "attributes": {
+        "isekai": true,
+        "cheat_ability": false,
+        "harem": true,
+        "rpg_like": true,
+        "weak_to_strong": true,
+        "revenge": true,
+        "dragon": false,
+        "game_world": false,
+        "summoned": true,
+        "magic_school": false
+      }
+    }
+  ]
+}
