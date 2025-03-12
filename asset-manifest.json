@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/narou-naiter/static/css/main.38d85cf6.css",
+    "main.js": "/narou-naiter/static/js/main.881c5b2d.js",
+    "static/js/453.7af92d6b.chunk.js": "/narou-naiter/static/js/453.7af92d6b.chunk.js",
+    "index.html": "/narou-naiter/index.html",
+    "main.38d85cf6.css.map": "/narou-naiter/static/css/main.38d85cf6.css.map",
+    "main.881c5b2d.js.map": "/narou-naiter/static/js/main.881c5b2d.js.map",
+    "453.7af92d6b.chunk.js.map": "/narou-naiter/static/js/453.7af92d6b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.38d85cf6.css",
+    "static/js/main.881c5b2d.js"
+  ]
+}
