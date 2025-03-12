@@ -55,6 +55,8 @@ const CardContainer = styled.div`
 `;
 
 const QuestionScreen = ({ question, answeredCount, onAnswer }) => {
+  const baseUrl = process.env.PUBLIC_URL;
+
   return (
     <Container>
       <CardContainer>
@@ -80,7 +82,7 @@ const QuestionScreen = ({ question, answeredCount, onAnswer }) => {
               </Button>
             </ButtonGroup>
           </CardContent>
-          <GoddessImage src="/images/thinking.png" alt="考え中の女神" />
+          <GoddessImage src={`${baseUrl}/images/thinking.png`} alt="考え中の女神" />
         </QuestionCard>
       </CardContainer>
     </Container>

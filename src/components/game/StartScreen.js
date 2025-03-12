@@ -29,10 +29,12 @@ const Description = styled(Text)`
 const CardContainer = styled.div`
   position: relative;
   width: 100%;
-  max-width: 800px; // カードとその横の画像を含むコンテナの最大幅
+  max-width: 800px;
 `;
 
 const StartScreen = ({ onStart }) => {
+  const baseUrl = process.env.PUBLIC_URL;
+
   return (
     <Container>
       <CardContainer>
@@ -41,7 +43,7 @@ const StartScreen = ({ onStart }) => {
             <IconWrapper>
               <QuestionCircleOutlined />
             </IconWrapper>
-            <Title level={2}>なろうネーター</Title>
+            <Title level={2}>なろう系アニメ診断</Title>
             <Description>
               あなたがイメージしている「なろう系アニメ」を当てます！
               <br />
@@ -51,7 +53,7 @@ const StartScreen = ({ onStart }) => {
               診断スタート
             </Button>
           </CardContent>
-          <GoddessImage src="/images/smile.png" alt="笑顔の女神" />
+          <GoddessImage src={`${baseUrl}/images/smile.png`} alt="笑顔の女神" />
         </StartCard>
       </CardContainer>
     </Container>

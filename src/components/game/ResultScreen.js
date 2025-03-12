@@ -62,10 +62,13 @@ const CardContainer = styled.div`
   position: relative;
   width: 100%;
   max-width: 800px;
+  margin-top: 400px;
   margin-bottom: 100px;
 `;
 
 const ResultScreen = ({ anime, questionCount, onShare, onRestart }) => {
+  const baseUrl = process.env.PUBLIC_URL;
+
   return (
     <Container>
       <CardContainer>
@@ -97,7 +100,7 @@ const ResultScreen = ({ anime, questionCount, onShare, onRestart }) => {
               </Button>
             </ButtonWrapper>
           </CardContent>
-          <GoddessImage src="/images/smile.png" alt="笑顔の女神" />
+          <GoddessImage src={`${baseUrl}/images/smile.png`} alt="笑顔の女神" />
         </ResultCard>
       </CardContainer>
     </Container>
