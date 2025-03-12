@@ -1,0 +1,26 @@
+{
+  "name": "narou-data-editor",
+  "version": "1.0.0",
+  "description": "なろう系アニメデータ管理ツール",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "concurrently \"vite\" \"electron .\"",
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.0.0",
+    "antd": "^5.0.0",
+    "electron-is-dev": "^2.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "zustand": "^4.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
+    "concurrently": "^8.0.0",
+    "electron": "^25.0.0",
+    "vite": "^4.3.0"
+  }
+}

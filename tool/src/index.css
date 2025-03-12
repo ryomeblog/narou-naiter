@@ -1,0 +1,83 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100vh;
+}
+
+.app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.list-panel {
+  width: 300px;
+  border-right: 1px solid #f0f0f0;
+  overflow-y: auto;
+}
+
+.edit-panel {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.preview-panel {
+  padding: 16px;
+  border-top: 1px solid #f0f0f0;
+  background: #fafafa;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.ant-form-item {
+  margin-bottom: 16px;
+}
+
+.attribute-form {
+  margin-top: 24px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 24px;
+}
+
+.image-preview {
+  max-width: 200px;
+  max-height: 200px;
+  margin-top: 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+}
+
+.form-actions {
+  margin-top: 24px;
+  text-align: right;
+}
+
+.yes-no-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.search-box {
+  margin-bottom: 16px;
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
