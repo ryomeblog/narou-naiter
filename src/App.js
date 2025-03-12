@@ -17,7 +17,7 @@ const App = () => {
   const {
     gameState,
     currentQuestion,
-    questionCount,
+    answeredQuestions,
     guessedAnime,
     startGame,
     answerQuestion,
@@ -33,13 +33,19 @@ const App = () => {
         return (
           <QuestionScreen
             question={currentQuestion}
-            questionNumber={questionCount + 1}
-            totalQuestions={20}
+            answeredCount={answeredQuestions.length}
             onAnswer={answerQuestion}
           />
         );
       case 'result':
-        return <ResultScreen anime={guessedAnime} onShare={shareResult} onRestart={resetGame} />;
+        return (
+          <ResultScreen
+            anime={guessedAnime}
+            questionCount={answeredQuestions.length}
+            onShare={shareResult}
+            onRestart={resetGame}
+          />
+        );
       default:
         return null;
     }

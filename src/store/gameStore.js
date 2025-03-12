@@ -4,22 +4,24 @@ import animeData from '../data/animes.json';
 import questionData from '../data/questions.json';
 
 // ユーティリティ関数
-const calculateInformationGain = (candidates, question) => {
-  if (candidates.length === 0) return 0;
+const calculateQuestionEffectiveness = (candidates, question) => {
+  if (candidates.length === 0) return { score: 0, weight: 0 };
 
   const yesCount = candidates.filter(anime => anime.attributes[question.attribute]).length;
   const noCount = candidates.length - yesCount;
 
-  // エントロピーに基づく情報利得を計算
+  // 最も均等に分割できる質問を選ぶ
   const total = candidates.length;
   const yesRatio = yesCount / total;
-  const noRatio = noCount / total;
 
-  // 分割の均一性を評価（0に近いほど良い分割）
-  const splitQuality = Math.abs(yesRatio - noRatio);
+  // エントロピーに基づくスコアを計算
+  // 完璧な分割（50:50）からの距離を計算
+  const entropy = -(yesCount === 0 || noCount === 0
+    ? 0
+    : -(yesRatio * Math.log2(yesRatio) + (noCount / total) * Math.log2(noCount / total)));
 
   return {
-    score: -splitQuality, // スコアを反転（小さいほど良い分割）
+    score: entropy,
     weight: question.weight,
   };
 };
@@ -29,16 +31,16 @@ const selectNextQuestion = (candidates, answeredQuestions) => {
 
   if (remainingQuestions.length === 0) return null;
 
-  // 各質問の情報利得を計算
+  // 各質問の効果を計算
   const questionScores = remainingQuestions.map(question => {
-    const { score, weight } = calculateInformationGain(candidates, question);
+    const { score, weight } = calculateQuestionEffectiveness(candidates, question);
     return {
       question,
       finalScore: score * weight, // 重み付けされたスコア
     };
   });
 
-  // スコアが最も高い質問を選択
+  // スコアが最も高い（最も効果的な）質問を選択
   return questionScores.sort((a, b) => b.finalScore - a.finalScore)[0].question;
 };
 
@@ -60,7 +62,7 @@ const useGameStore = create((set, get) => ({
   candidates: [],
   currentQuestion: null,
   answers: {},
-  questionCount: 0,
+  answeredQuestions: [], // 回答済みの質問を追跡
   guessedAnime: null,
 
   // アクション
@@ -69,7 +71,7 @@ const useGameStore = create((set, get) => ({
       gameState: 'question',
       candidates: animeData.animes,
       answers: {},
-      questionCount: 0,
+      answeredQuestions: [],
       guessedAnime: null,
       currentQuestion: selectNextQuestion(animeData.animes, []),
     });
@@ -80,20 +82,30 @@ const useGameStore = create((set, get) => ({
     const newState = produce(state, draft => {
       // 回答を記録
       draft.answers[state.currentQuestion.id] = answer;
-      draft.questionCount++;
+      draft.answeredQuestions.push(state.currentQuestion.id);
 
       // 候補を絞り込む
       const newCandidates = filterCandidates(state.candidates, state.currentQuestion.id, answer);
       draft.candidates = newCandidates;
 
       // 次の状態を決定
-      if (newCandidates.length <= 1 || draft.questionCount >= 20) {
-        // 候補が1つ以下、または質問数が上限に達した場合
+      if (newCandidates.length === 1) {
+        // 一意に絞り込めた場合
         draft.gameState = 'result';
-        draft.guessedAnime = newCandidates[0] || null;
+        draft.guessedAnime = newCandidates[0];
+      } else if (newCandidates.length === 0) {
+        // 候補が見つからない場合は最初の候補を表示
+        draft.gameState = 'result';
+        draft.guessedAnime = state.candidates[0];
       } else {
         // 次の質問を選択
-        draft.currentQuestion = selectNextQuestion(newCandidates, Object.keys(draft.answers));
+        draft.currentQuestion = selectNextQuestion(newCandidates, draft.answeredQuestions);
+
+        // 質問がなくなった場合は最も可能性の高い候補を表示
+        if (!draft.currentQuestion) {
+          draft.gameState = 'result';
+          draft.guessedAnime = newCandidates[0];
+        }
       }
     });
 
@@ -106,7 +118,7 @@ const useGameStore = create((set, get) => ({
       candidates: [],
       currentQuestion: null,
       answers: {},
-      questionCount: 0,
+      answeredQuestions: [],
       guessedAnime: null,
     });
   },
@@ -116,7 +128,8 @@ const useGameStore = create((set, get) => ({
     const state = get();
     if (!state.guessedAnime) return;
 
-    const text = `私がイメージしていたなろう系アニメは「${state.guessedAnime.title}」でした！\n#なろう系アニメ診断\n`;
+    const questionCount = state.answeredQuestions.length;
+    const text = `私がイメージしていたなろう系アニメは${questionCount}問で「${state.guessedAnime.title}」と診断されました！\n#なろう系アニメ診断\n`;
     const encodedText = encodeURIComponent(text);
 
     if (platform === 'twitter') {

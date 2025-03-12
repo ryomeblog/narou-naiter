@@ -3,19 +3,13 @@ import { Card, Space, Typography } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import Button from '../shared/Button';
-import QuestionProgress from '../shared/ProgressBar';
+import { CardBase, CardContent, Container, GoddessImage } from '../shared/styles';
 
 const { Title, Text } = Typography;
 
-const QuestionCard = styled(Card)`
-  max-width: 600px;
-  margin: 40px auto;
-  text-align: center;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
+const QuestionCard = styled(CardBase)`
   .ant-card-body {
-    padding: 32px 24px;
+    padding: 0;
   }
 `;
 
@@ -54,33 +48,42 @@ const ButtonGroup = styled(Space)`
   }
 `;
 
-const QuestionScreen = ({ question, questionNumber, totalQuestions, onAnswer }) => {
+const CardContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+`;
+
+const QuestionScreen = ({ question, answeredCount, onAnswer }) => {
   return (
-    <QuestionCard>
-      <QuestionProgress current={questionNumber} total={totalQuestions} />
+    <Container>
+      <CardContainer>
+        <QuestionCard as={Card}>
+          <CardContent>
+            <IconWrapper>
+              <QuestionCircleOutlined />
+            </IconWrapper>
 
-      <IconWrapper>
-        <QuestionCircleOutlined />
-      </IconWrapper>
+            <QuestionCount>回答済みの質問: {answeredCount}問</QuestionCount>
 
-      <QuestionCount>
-        質問 {questionNumber} / {totalQuestions}
-      </QuestionCount>
+            <QuestionText level={4}>{question.text}</QuestionText>
 
-      <QuestionText level={4}>{question.text}</QuestionText>
-
-      <ButtonGroup size="large">
-        <Button type="primary" answerType="yes" onClick={() => onAnswer('yes')}>
-          はい
-        </Button>
-        <Button type="primary" answerType="no" onClick={() => onAnswer('no')}>
-          いいえ
-        </Button>
-        <Button answerType="unknown" onClick={() => onAnswer('unknown')}>
-          わからない
-        </Button>
-      </ButtonGroup>
-    </QuestionCard>
+            <ButtonGroup size="large">
+              <Button type="primary" answerType="yes" onClick={() => onAnswer('yes')}>
+                はい
+              </Button>
+              <Button type="primary" answerType="no" onClick={() => onAnswer('no')}>
+                いいえ
+              </Button>
+              <Button answerType="unknown" onClick={() => onAnswer('unknown')}>
+                わからない
+              </Button>
+            </ButtonGroup>
+          </CardContent>
+          <GoddessImage src="/images/thinking.png" alt="考え中の女神" />
+        </QuestionCard>
+      </CardContainer>
+    </Container>
   );
 };
 
