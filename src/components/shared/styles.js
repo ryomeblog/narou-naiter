@@ -2,12 +2,17 @@ import styled from 'styled-components';
 
 // 共通のスタイルコンポーネント
 export const Container = styled.div`
-  position: relative;
-  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 `;
 
 export const CardBase = styled.div`
@@ -20,12 +25,13 @@ export const CardBase = styled.div`
   background-color: rgba(255, 255, 255, 0.95);
   z-index: 1;
   min-height: 400px;
+  margin: auto;
   display: flex;
   flex-direction: column;
   overflow: visible;
 
   @media (max-width: 768px) {
-    margin-bottom: 20px;
+    margin: 60px auto;
   }
 `;
 
@@ -38,8 +44,8 @@ export const CardContent = styled.div`
 
 export const GoddessImage = styled.img`
   position: absolute;
-  top: -20px;
-  right: -65px;
+  top: -25px;
+  right: -75px;
   width: 350px;
   height: auto;
   pointer-events: none;

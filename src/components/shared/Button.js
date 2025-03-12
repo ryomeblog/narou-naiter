@@ -43,14 +43,15 @@ const StyledButton = styled(AntButton)`
   &.share-button {
     margin: 0 8px;
 
-    &.twitter {
-      background-color: #1da1f2;
-      border-color: #1da1f2;
+    &.x {
+      background-color: rgb(0, 0, 0);
+      border-color: rgb(0, 0, 0);
       color: white;
 
       &:hover {
-        background-color: #1a91da;
-        border-color: #1a91da;
+        background-color: rgb(56, 56, 56);
+        border-color: rgb(56, 56, 56);
+        color: white;
       }
     }
 
@@ -62,6 +63,7 @@ const StyledButton = styled(AntButton)`
       &:hover {
         background-color: #00a000;
         border-color: #00a000;
+        color: white;
       }
     }
   }

@@ -1,17 +1,10 @@
 import { ConfigProvider } from 'antd';
 import jaJP from 'antd/locale/ja_JP';
 import React from 'react';
-import styled from 'styled-components';
 import QuestionScreen from './components/game/QuestionScreen';
 import ResultScreen from './components/game/ResultScreen';
 import StartScreen from './components/game/StartScreen';
 import useGameStore from './store/gameStore';
-
-const AppWrapper = styled.div`
-  min-height: 100vh;
-  padding: 20px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-`;
 
 const App = () => {
   const {
@@ -63,7 +56,7 @@ const App = () => {
         },
       }}
     >
-      <AppWrapper>{renderContent()}</AppWrapper>
+      {renderContent()}
     </ConfigProvider>
   );
 };

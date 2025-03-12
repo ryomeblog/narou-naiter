@@ -10,12 +10,11 @@ const calculateQuestionEffectiveness = (candidates, question) => {
   const yesCount = candidates.filter(anime => anime.attributes[question.attribute]).length;
   const noCount = candidates.length - yesCount;
 
-  // 最も均等に分割できる質問を選ぶ
+  // エントロピーに基づくスコアを計算
   const total = candidates.length;
   const yesRatio = yesCount / total;
 
   // エントロピーに基づくスコアを計算
-  // 完璧な分割（50:50）からの距離を計算
   const entropy = -(yesCount === 0 || noCount === 0
     ? 0
     : -(yesRatio * Math.log2(yesRatio) + (noCount / total) * Math.log2(noCount / total)));
@@ -129,11 +128,11 @@ const useGameStore = create((set, get) => ({
     if (!state.guessedAnime) return;
 
     const questionCount = state.answeredQuestions.length;
-    const text = `私がイメージしていたなろう系アニメは${questionCount}問で「${state.guessedAnime.title}」と診断されました！\n#なろう系アニメ診断\n`;
+    const text = `私がイメージしていたなろう系アニメは${questionCount}問で「${state.guessedAnime.title}」と診断されました！\n#なろうネーター\n#なろう系アニメ診断\n`;
     const encodedText = encodeURIComponent(text);
 
-    if (platform === 'twitter') {
-      window.open(`https://twitter.com/intent/tweet?text=${encodedText}`, '_blank');
+    if (platform === 'x') {
+      window.open(`https://x.com/intent/tweet?text=${encodedText}`, '_blank');
     } else if (platform === 'line') {
       window.open(`https://line.me/R/msg/text/?${encodedText}`, '_blank');
     }

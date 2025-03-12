@@ -1,4 +1,3 @@
-import { TwitterOutlined } from '@ant-design/icons';
 import { Space } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
@@ -8,6 +7,11 @@ const ShareButtonsWrapper = styled(Space)`
   margin: 16px 0;
   display: flex;
   justify-content: center;
+  gap: 16px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
 `;
 
 const LineIcon = styled.span`
@@ -16,11 +20,17 @@ const LineIcon = styled.span`
   font-size: 16px;
 `;
 
+const XIcon = styled.span`
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+`;
+
 const ShareButtons = ({ onShare }) => {
   return (
     <ShareButtonsWrapper>
-      <Button shareType="twitter" icon={<TwitterOutlined />} onClick={() => onShare('twitter')}>
-        Twitterでシェア
+      <Button shareType="x" icon={<XIcon>𝕏</XIcon>} onClick={() => onShare('x')}>
+        Xでシェア
       </Button>
       <Button shareType="line" icon={<LineIcon>L</LineIcon>} onClick={() => onShare('line')}>
         LINEでシェア

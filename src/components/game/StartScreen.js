@@ -41,7 +41,7 @@ const StartScreen = ({ onStart }) => {
             <IconWrapper>
               <QuestionCircleOutlined />
             </IconWrapper>
-            <Title level={2}>なろう系アニメ診断</Title>
+            <Title level={2}>なろうネーター</Title>
             <Description>
               あなたがイメージしている「なろう系アニメ」を当てます！
               <br />
