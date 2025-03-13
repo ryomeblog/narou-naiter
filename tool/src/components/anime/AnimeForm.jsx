@@ -39,7 +39,24 @@ export const AnimeForm = ({ anime }) => {
       description: anime.description,
     });
     setCurrentImageUrl(anime.imageUrl);
-  }, [anime, form]);
+  }, [anime, form, questions]); // questionsの変更も監視
+
+  // 質問が追加されたときにアニメの属性を更新
+  useEffect(() => {
+    const updatedAttributes = { ...anime.attributes };
+    let hasNewAttribute = false;
+
+    questions.forEach(question => {
+      if (!(question.attribute in updatedAttributes)) {
+        updatedAttributes[question.attribute] = false;
+        hasNewAttribute = true;
+      }
+    });
+
+    if (hasNewAttribute) {
+      updateAnime({ ...anime, attributes: updatedAttributes });
+    }
+  }, [questions, anime, updateAnime]);
 
   return (
     <Form form={form} layout="vertical" onFinish={handleSubmit} className="edit-form">

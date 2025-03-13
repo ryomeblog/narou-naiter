@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { useQuestionStore } from './questionStore';
 
 export const useAnimeStore = create((set, get) => ({
   animes: [],
@@ -14,6 +15,24 @@ export const useAnimeStore = create((set, get) => ({
         const data = JSON.parse(result.content);
         const animes = data.animes || [];
         set({ animes, filteredAnimes: animes });
+
+        // 既存の質問の属性を全アニメに追加
+        const questions = useQuestionStore.getState().questions;
+        if (questions.length > 0) {
+          const updatedAnimes = animes.map(anime => {
+            const attributes = { ...anime.attributes };
+            questions.forEach(question => {
+              if (!(question.attribute in attributes)) {
+                attributes[question.attribute] = false;
+              }
+            });
+            return {
+              ...anime,
+              attributes,
+            };
+          });
+          set({ animes: updatedAnimes, filteredAnimes: updatedAnimes });
+        }
       }
     } catch (error) {
       console.error('アニメデータの読み込みに失敗しました:', error);
@@ -23,14 +42,33 @@ export const useAnimeStore = create((set, get) => ({
 
   // アニメの追加
   addAnime: anime => {
+    // 既存の質問の属性を追加
+    const questions = useQuestionStore.getState().questions;
+    const attributes = { ...anime.attributes };
+    questions.forEach(question => {
+      if (!(question.attribute in attributes)) {
+        attributes[question.attribute] = false;
+      }
+    });
+    const animeWithAttributes = {
+      ...anime,
+      attributes,
+    };
+
     set(state => ({
-      animes: [...state.animes, anime],
+      animes: [...state.animes, animeWithAttributes],
       filteredAnimes: state.searchQuery
-        ? [...state.animes, anime].filter(a =>
+        ? [...state.animes, animeWithAttributes].filter(a =>
             a.title.toLowerCase().includes(state.searchQuery.toLowerCase())
           )
-        : [...state.animes, anime],
+        : [...state.animes, animeWithAttributes],
+      selectedAnime: animeWithAttributes,
     }));
+
+    // 自動保存
+    setTimeout(() => {
+      get().saveAnimes();
+    }, 0);
   },
 
   // 検索クエリの設定
@@ -53,6 +91,11 @@ export const useAnimeStore = create((set, get) => ({
             .filter(anime => anime.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
         : state.animes.map(anime => (anime.id === updatedAnime.id ? updatedAnime : anime)),
     }));
+
+    // 自動保存
+    setTimeout(() => {
+      get().saveAnimes();
+    }, 0);
   },
 
   // アニメの削除

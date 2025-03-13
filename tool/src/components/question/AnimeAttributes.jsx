@@ -1,11 +1,13 @@
 import { Card, Typography } from 'antd';
 import React from 'react';
 import { useAnimeStore } from '../../store/animeStore';
+import { useQuestionStore } from '../../store/questionStore';
 
 const { Text } = Typography;
 
 export const AnimeAttributes = ({ question, animes }) => {
   const { updateAnimeAttribute } = useAnimeStore();
+  const { updateQuestion } = useQuestionStore();
 
   if (!question.attribute) {
     return <Text type="secondary">属性キーを設定すると、各アニメの属性を設定できます</Text>;
@@ -22,7 +24,10 @@ export const AnimeAttributes = ({ question, animes }) => {
           <div className="yes-no-buttons">
             <button
               type="button"
-              onClick={() => updateAnimeAttribute(anime.id, question.attribute, true)}
+              onClick={() => {
+                updateAnimeAttribute(anime.id, question.attribute, true);
+                updateQuestion(question, question.attribute); // 質問の状態も更新
+              }}
               style={{
                 padding: '4px 15px',
                 border: '1px solid #d9d9d9',
@@ -37,7 +42,10 @@ export const AnimeAttributes = ({ question, animes }) => {
             </button>
             <button
               type="button"
-              onClick={() => updateAnimeAttribute(anime.id, question.attribute, false)}
+              onClick={() => {
+                updateAnimeAttribute(anime.id, question.attribute, false);
+                updateQuestion(question, question.attribute); // 質問の状態も更新
+              }}
               style={{
                 padding: '4px 15px',
                 border: '1px solid #d9d9d9',

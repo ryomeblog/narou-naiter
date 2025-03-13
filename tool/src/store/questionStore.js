@@ -26,14 +26,19 @@ export const useQuestionStore = create((set, get) => ({
   addQuestion: question => {
     // 新しい質問を追加する際、全てのアニメの属性にも追加
     if (question.attribute) {
-      const updateAnimes = useAnimeStore.getState().animes.map(anime => ({
+      const animes = useAnimeStore.getState().animes.map(anime => ({
         ...anime,
         attributes: {
           ...anime.attributes,
-          [question.attribute]: false, // デフォルトでfalse
+          // 既存の属性値を保持、なければfalse
+          [question.attribute]:
+            anime.attributes[question.attribute] !== undefined
+              ? anime.attributes[question.attribute]
+              : false,
         },
       }));
-      useAnimeStore.setState({ animes: updateAnimes });
+      useAnimeStore.setState({ animes });
+      useAnimeStore.getState().saveAnimes();
     }
 
     // 質問を追加してフィルタリングを更新
@@ -65,26 +70,31 @@ export const useQuestionStore = create((set, get) => ({
 
   // 質問の更新
   updateQuestion: (updatedQuestion, oldAttribute) => {
-    // 質問の属性キーが変更された場合、アニメの属性も更新
+    const animes = useAnimeStore.getState().animes;
+    let updatedAnimes = [...animes];
+
+    // 属性キーが変更された場合
     if (oldAttribute && oldAttribute !== updatedQuestion.attribute) {
-      // 古い属性を削除して新しい属性を追加
-      const animes = useAnimeStore.getState().animes.map(anime => {
+      // 古い属性を削除
+      updatedAnimes = updatedAnimes.map(anime => {
         const { [oldAttribute]: removed, ...restAttributes } = anime.attributes;
-
-        // 属性キーが空の場合は新しい属性を追加しない
-        if (!updatedQuestion.attribute) {
-          return { ...anime, attributes: restAttributes };
-        }
-
         return {
           ...anime,
-          attributes: {
-            ...restAttributes,
-            [updatedQuestion.attribute]: false,
-          },
+          attributes: restAttributes,
         };
       });
-      useAnimeStore.setState({ animes });
+    }
+
+    // 新しい属性が存在する場合は追加
+    if (updatedQuestion.attribute) {
+      updatedAnimes = updatedAnimes.map(anime => ({
+        ...anime,
+        attributes: {
+          ...anime.attributes,
+          [updatedQuestion.attribute]: anime.attributes[oldAttribute] || false,
+        },
+      }));
+      useAnimeStore.setState({ animes: updatedAnimes });
     }
 
     set(state => ({
@@ -98,10 +108,11 @@ export const useQuestionStore = create((set, get) => ({
         : state.questions.map(question =>
             question.id === updatedQuestion.id ? updatedQuestion : question
           ),
-      selectedQuestion: updatedQuestion, // 選択中の質問も更新
+      selectedQuestion: updatedQuestion,
     }));
 
-    get().saveQuestions(); // JSONファイルも更新
+    // JSONファイルも更新
+    get().saveQuestions();
   },
 
   // 質問の削除

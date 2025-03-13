@@ -65,6 +65,7 @@ export const AnimeEditor = () => {
               height: '100%',
               overflow: 'auto',
               padding: '16px',
+              marginBottom: '45px',
             }}
             renderItem={anime => (
               <List.Item
@@ -75,7 +76,7 @@ export const AnimeEditor = () => {
                   padding: '8px 16px',
                   border: '1px solid #f0f0f0',
                   borderRadius: '4px',
-                  marginBottom: '40px',
+                  marginBottom: '8px',
                 }}
               >
                 {anime.title || '(無題)'}
