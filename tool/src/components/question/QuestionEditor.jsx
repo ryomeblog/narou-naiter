@@ -7,26 +7,45 @@ import { QuestionForm } from './QuestionForm';
 const { Search } = Input;
 
 export const QuestionEditor = () => {
-  const { questions, selectedQuestion, setSelectedQuestion, initialize } = useQuestionStore();
+  const {
+    filteredQuestions,
+    selectedQuestion,
+    setSelectedQuestion,
+    setSearchQuery,
+    addQuestion,
+    initialize,
+  } = useQuestionStore();
 
   useEffect(() => {
     initialize();
   }, [initialize]);
 
   const handleAdd = () => {
-    setSelectedQuestion({
+    const newQuestion = {
       id: `${Date.now()}`,
       text: '',
       attribute: '',
       weight: 1,
-    });
+    };
+
+    addQuestion(newQuestion);
+    setSelectedQuestion(newQuestion);
+    // フォームを表示するために選択状態にする
+  };
+
+  const handleSearch = value => {
+    setSearchQuery(value);
   };
 
   return (
     <div className="main-content">
       <div className="list-panel">
         <div className="search-box">
-          <Search placeholder="質問を検索" />
+          <Search
+            placeholder="質問を検索"
+            onSearch={handleSearch}
+            onChange={e => handleSearch(e.target.value)}
+          />
           <Button
             type="primary"
             icon={<PlusOutlined />}
@@ -36,21 +55,33 @@ export const QuestionEditor = () => {
             新規作成
           </Button>
         </div>
-        <List
-          dataSource={questions}
-          renderItem={question => (
-            <List.Item
-              onClick={() => setSelectedQuestion(question)}
-              style={{
-                cursor: 'pointer',
-                backgroundColor: selectedQuestion?.id === question.id ? '#e6f7ff' : 'transparent',
-                padding: '8px 16px',
-              }}
-            >
-              {question.text || '(無題)'}
-            </List.Item>
-          )}
-        />
+        <div className="list-container" style={{ flex: 1, overflow: 'hidden' }}>
+          <List
+            dataSource={filteredQuestions}
+            size="small"
+            style={{
+              height: '100%',
+              overflow: 'auto',
+              padding: '16px',
+              marginBottom: '45px',
+            }}
+            renderItem={question => (
+              <List.Item
+                onClick={() => setSelectedQuestion(question)}
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: selectedQuestion?.id === question.id ? '#e6f7ff' : 'transparent',
+                  padding: '8px 16px',
+                  border: '1px solid #f0f0f0',
+                  borderRadius: '4px',
+                  marginBottom: '8px',
+                }}
+              >
+                {question.text || '(無題)'}
+              </List.Item>
+            )}
+          />
+        </div>
       </div>
       <div className="edit-panel">
         {selectedQuestion && <QuestionForm question={selectedQuestion} />}

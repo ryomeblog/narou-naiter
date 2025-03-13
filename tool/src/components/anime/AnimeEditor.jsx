@@ -8,7 +8,14 @@ import { AnimeForm } from './AnimeForm';
 const { Search } = Input;
 
 export const AnimeEditor = () => {
-  const { animes, selectedAnime, setSelectedAnime, initialize: initializeAnimes } = useAnimeStore();
+  const {
+    filteredAnimes,
+    selectedAnime,
+    setSelectedAnime,
+    setSearchQuery,
+    addAnime,
+    initialize: initializeAnimes,
+  } = useAnimeStore();
 
   const { initialize: initializeQuestions } = useQuestionStore();
 
@@ -18,20 +25,30 @@ export const AnimeEditor = () => {
   }, [initializeAnimes, initializeQuestions]);
 
   const handleAdd = () => {
-    setSelectedAnime({
+    const newAnime = {
       id: `${Date.now()}`,
       title: '',
       imageUrl: '',
       description: '',
       attributes: {},
-    });
+    };
+    addAnime(newAnime);
+    setSelectedAnime(newAnime);
+  };
+
+  const handleSearch = value => {
+    setSearchQuery(value);
   };
 
   return (
     <div className="main-content">
       <div className="list-panel">
         <div className="search-box">
-          <Search placeholder="アニメを検索" />
+          <Search
+            placeholder="アニメを検索"
+            onSearch={handleSearch}
+            onChange={e => handleSearch(e.target.value)}
+          />
           <Button
             type="primary"
             icon={<PlusOutlined />}
@@ -41,21 +58,31 @@ export const AnimeEditor = () => {
             新規作成
           </Button>
         </div>
-        <List
-          dataSource={animes}
-          renderItem={anime => (
-            <List.Item
-              onClick={() => setSelectedAnime(anime)}
-              style={{
-                cursor: 'pointer',
-                backgroundColor: selectedAnime?.id === anime.id ? '#e6f7ff' : 'transparent',
-                padding: '8px 16px',
-              }}
-            >
-              {anime.title || '(無題)'}
-            </List.Item>
-          )}
-        />
+        <div className="list-container" style={{ flex: 1, overflow: 'hidden' }}>
+          <List
+            dataSource={filteredAnimes}
+            style={{
+              height: '100%',
+              overflow: 'auto',
+              padding: '16px',
+            }}
+            renderItem={anime => (
+              <List.Item
+                onClick={() => setSelectedAnime(anime)}
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: selectedAnime?.id === anime.id ? '#e6f7ff' : 'transparent',
+                  padding: '8px 16px',
+                  border: '1px solid #f0f0f0',
+                  borderRadius: '4px',
+                  marginBottom: '40px',
+                }}
+              >
+                {anime.title || '(無題)'}
+              </List.Item>
+            )}
+          />
+        </div>
       </div>
       <div className="edit-panel">{selectedAnime && <AnimeForm anime={selectedAnime} />}</div>
     </div>

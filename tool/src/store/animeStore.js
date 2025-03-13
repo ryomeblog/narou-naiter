@@ -3,6 +3,8 @@ import { create } from 'zustand';
 export const useAnimeStore = create((set, get) => ({
   animes: [],
   selectedAnime: null,
+  searchQuery: '',
+  filteredAnimes: [],
 
   // データの初期化
   initialize: async () => {
@@ -10,11 +12,12 @@ export const useAnimeStore = create((set, get) => ({
       const result = await window.electron.readFile('../src/data/animes.json');
       if (result.success) {
         const data = JSON.parse(result.content);
-        set({ animes: data.animes || [] });
+        const animes = data.animes || [];
+        set({ animes, filteredAnimes: animes });
       }
     } catch (error) {
       console.error('アニメデータの読み込みに失敗しました:', error);
-      set({ animes: [] });
+      set({ animes: [], filteredAnimes: [] });
     }
   },
 
@@ -22,6 +25,21 @@ export const useAnimeStore = create((set, get) => ({
   addAnime: anime => {
     set(state => ({
       animes: [...state.animes, anime],
+      filteredAnimes: state.searchQuery
+        ? [...state.animes, anime].filter(a =>
+            a.title.toLowerCase().includes(state.searchQuery.toLowerCase())
+          )
+        : [...state.animes, anime],
+    }));
+  },
+
+  // 検索クエリの設定
+  setSearchQuery: query => {
+    set(state => ({
+      searchQuery: query,
+      filteredAnimes: query
+        ? state.animes.filter(anime => anime.title.toLowerCase().includes(query.toLowerCase()))
+        : state.animes,
     }));
   },
 
@@ -29,6 +47,11 @@ export const useAnimeStore = create((set, get) => ({
   updateAnime: updatedAnime => {
     set(state => ({
       animes: state.animes.map(anime => (anime.id === updatedAnime.id ? updatedAnime : anime)),
+      filteredAnimes: state.searchQuery
+        ? state.animes
+            .map(anime => (anime.id === updatedAnime.id ? updatedAnime : anime))
+            .filter(anime => anime.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
+        : state.animes.map(anime => (anime.id === updatedAnime.id ? updatedAnime : anime)),
     }));
   },
 
@@ -36,6 +59,11 @@ export const useAnimeStore = create((set, get) => ({
   deleteAnime: id => {
     set(state => ({
       animes: state.animes.filter(anime => anime.id !== id),
+      filteredAnimes: state.searchQuery
+        ? state.animes
+            .filter(anime => anime.id !== id)
+            .filter(anime => anime.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
+        : state.animes.filter(anime => anime.id !== id),
     }));
   },
 

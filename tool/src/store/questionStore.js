@@ -4,6 +4,8 @@ import { useAnimeStore } from './animeStore';
 export const useQuestionStore = create((set, get) => ({
   questions: [],
   selectedQuestion: null,
+  searchQuery: '',
+  filteredQuestions: [],
 
   // データの初期化
   initialize: async () => {
@@ -11,28 +13,53 @@ export const useQuestionStore = create((set, get) => ({
       const result = await window.electron.readFile('../src/data/questions.json');
       if (result.success) {
         const data = JSON.parse(result.content);
-        set({ questions: data.questions || [] });
+        const questions = data.questions || [];
+        set({ questions, filteredQuestions: questions });
       }
     } catch (error) {
       console.error('質問データの読み込みに失敗しました:', error);
-      set({ questions: [] });
+      set({ questions: [], filteredQuestions: [] });
     }
   },
 
   // 質問の追加
   addQuestion: question => {
     // 新しい質問を追加する際、全てのアニメの属性にも追加
-    const updateAnimes = useAnimeStore.getState().animes.map(anime => ({
-      ...anime,
-      attributes: {
-        ...anime.attributes,
-        [question.attribute]: false, // デフォルトでfalse
-      },
-    }));
-    useAnimeStore.setState({ animes: updateAnimes });
+    if (question.attribute) {
+      const updateAnimes = useAnimeStore.getState().animes.map(anime => ({
+        ...anime,
+        attributes: {
+          ...anime.attributes,
+          [question.attribute]: false, // デフォルトでfalse
+        },
+      }));
+      useAnimeStore.setState({ animes: updateAnimes });
+    }
 
+    // 質問を追加してフィルタリングを更新
+    set(state => {
+      const updatedQuestions = [...state.questions, question];
+      return {
+        questions: updatedQuestions,
+        filteredQuestions: state.searchQuery
+          ? updatedQuestions.filter(q =>
+              q.text.toLowerCase().includes(state.searchQuery.toLowerCase())
+            )
+          : updatedQuestions,
+      };
+    });
+
+    // JSONファイルを自動的に更新
+    get().saveQuestions();
+  },
+
+  // 検索クエリの設定
+  setSearchQuery: query => {
     set(state => ({
-      questions: [...state.questions, question],
+      searchQuery: query,
+      filteredQuestions: state.questions.filter(q =>
+        q.text.toLowerCase().includes(query.toLowerCase())
+      ),
     }));
   },
 
@@ -40,13 +67,20 @@ export const useQuestionStore = create((set, get) => ({
   updateQuestion: (updatedQuestion, oldAttribute) => {
     // 質問の属性キーが変更された場合、アニメの属性も更新
     if (oldAttribute && oldAttribute !== updatedQuestion.attribute) {
+      // 古い属性を削除して新しい属性を追加
       const animes = useAnimeStore.getState().animes.map(anime => {
-        const { [oldAttribute]: oldValue, ...restAttributes } = anime.attributes;
+        const { [oldAttribute]: removed, ...restAttributes } = anime.attributes;
+
+        // 属性キーが空の場合は新しい属性を追加しない
+        if (!updatedQuestion.attribute) {
+          return { ...anime, attributes: restAttributes };
+        }
+
         return {
           ...anime,
           attributes: {
             ...restAttributes,
-            [updatedQuestion.attribute]: oldValue || false,
+            [updatedQuestion.attribute]: false,
           },
         };
       });
@@ -57,7 +91,17 @@ export const useQuestionStore = create((set, get) => ({
       questions: state.questions.map(question =>
         question.id === updatedQuestion.id ? updatedQuestion : question
       ),
+      filteredQuestions: state.searchQuery
+        ? state.questions
+            .map(question => (question.id === updatedQuestion.id ? updatedQuestion : question))
+            .filter(q => q.text.toLowerCase().includes(state.searchQuery.toLowerCase()))
+        : state.questions.map(question =>
+            question.id === updatedQuestion.id ? updatedQuestion : question
+          ),
+      selectedQuestion: updatedQuestion, // 選択中の質問も更新
     }));
+
+    get().saveQuestions(); // JSONファイルも更新
   },
 
   // 質問の削除
@@ -77,6 +121,11 @@ export const useQuestionStore = create((set, get) => ({
 
     set(state => ({
       questions: state.questions.filter(question => question.id !== id),
+      filteredQuestions: state.searchQuery
+        ? state.questions
+            .filter(question => question.id !== id)
+            .filter(q => q.text.toLowerCase().includes(state.searchQuery.toLowerCase()))
+        : state.questions.filter(question => question.id !== id),
     }));
   },
 

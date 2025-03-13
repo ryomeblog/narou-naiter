@@ -43,26 +43,27 @@ tool/
 ├── package.json
 ├── src/
 │   ├── main.js              # Electron メインプロセス
+│   ├── index.jsx           # Reactアプリケーションのエントリーポイント
+│   ├── index.css           # グローバルスタイル
+│   ├── App.jsx            # メインアプリケーションコンポーネント
 │   ├── preload.js           # プリロードスクリプト
-│   ├── index.html
 │   ├── components/
 │   │   ├── anime/
-│   │   │   ├── AnimeList.js        # アニメ一覧
-│   │   │   ├── AnimeForm.js        # アニメ基本情報フォーム
-│   │   │   └── AttributeForm.js     # 質問別属性設定フォーム
+│   │   │   ├── AnimeEditor.jsx     # アニメ編集画面
+│   │   │   ├── AnimeForm.jsx       # アニメ基本情報フォーム
+│   │   │   └── AttributeForm.jsx    # 質問別属性設定フォーム
 │   │   ├── question/
-│   │   │   ├── QuestionList.js     # 質問一覧
-│   │   │   ├── QuestionForm.js     # 質問基本情報フォーム
-│   │   │   └── AnimeAttributes.js   # アニメ別属性設定フォーム
+│   │   │   ├── QuestionEditor.jsx  # 質問編集画面
+│   │   │   ├── QuestionForm.jsx    # 質問基本情報フォーム
+│   │   │   └── AnimeAttributes.jsx  # アニメ別属性設定フォーム
 │   │   └── shared/
-│   │       ├── JsonPreview.js      # JSON形式プレビュー
-│   │       └── ImagePreview.js     # 画像プレビュー
+│   │       ├── JsonPreview.jsx     # JSON形式プレビュー
+│   │       ├── ImagePreview.jsx    # 画像プレビュー
+│   │       └── Toolbar.jsx         # ツールバー
 │   ├── store/
 │   │   ├── animeStore.js    # アニメデータの状態管理
 │   │   └── questionStore.js # 質問データの状態管理
-│   └── utils/
-│       ├── validation.js    # バリデーション
-│       └── fileHelpers.js   # ファイル操作
+├── index.html               # メインのHTMLファイ作
 ```
 
 ## UI設計

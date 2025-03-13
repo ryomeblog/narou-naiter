@@ -23,7 +23,12 @@ export const AttributeForm = ({ anime, questions, onChange }) => {
       {questions.map(question => (
         <Card key={question.id} size="small" style={{ marginBottom: '8px' }}>
           <div style={{ marginBottom: '8px' }}>{question.text}</div>
-          <div className="yes-no-buttons">
+          <div
+            style={{
+              display: 'flex',
+              gap: '8px',
+            }}
+          >
             <button
               type="button"
               onClick={() => handleAttributeChange(question.attribute, true)}
@@ -31,6 +36,7 @@ export const AttributeForm = ({ anime, questions, onChange }) => {
                 padding: '4px 15px',
                 border: '1px solid #d9d9d9',
                 borderRadius: '2px',
+                minWidth: '80px',
                 backgroundColor: anime.attributes[question.attribute] === true ? '#1890ff' : '#fff',
                 color:
                   anime.attributes[question.attribute] === true ? '#fff' : 'rgba(0, 0, 0, 0.85)',
@@ -46,6 +52,7 @@ export const AttributeForm = ({ anime, questions, onChange }) => {
                 padding: '4px 15px',
                 border: '1px solid #d9d9d9',
                 borderRadius: '2px',
+                minWidth: '80px',
                 backgroundColor:
                   anime.attributes[question.attribute] === false ? '#1890ff' : '#fff',
                 color:

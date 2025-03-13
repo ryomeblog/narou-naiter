@@ -38,21 +38,10 @@
     },
     {
       "id": "1741838804405",
-      "title": "幼女戦記",
-      "imageUrl": "https://m.media-amazon.com/images/I/51AuV+-8dFL._SS500_.jpg",
-      "description": "エリート社員であった主人公は、同僚の逆恨みにより命を落としたことで、孤児の幼女、ターニャ・デグレチャフとして生まれ変わる。彼女は帝国軍士官学校にて、最終過程である研修に取り組んでいた。無事に最終過程が終わると思われたのだが、帝国と協商連合が戦争状態に陥る。ターニャは単独で戦わなければならず、持ちこたえることも逃げることもできない絶体絶命な状況。そんな彼女は、とある作戦を実行しようと試みるのだが……。",
-      "attributes": {
-        "isekai": true,
-        "cheat_ability": true,
-        "harem": false,
-        "rpg_like": false,
-        "weak_to_strong": false,
-        "revenge": false,
-        "dragon": false,
-        "game_world": false,
-        "summoned": false,
-        "magic_school": false
-      }
+      "title": "",
+      "imageUrl": "",
+      "description": "",
+      "attributes": {}
     }
   ]
 }
